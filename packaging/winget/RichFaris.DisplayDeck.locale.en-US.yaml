@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.6.0.schema.json
+PackageIdentifier: RichFaris.DisplayDeck
+PackageVersion: 0.2.0
+PackageLocale: en-US
+Publisher: Rich Faris
+PublisherUrl: https://github.com/richfaris
+PublisherSupportUrl: https://github.com/richfaris/DisplayDeck/issues
+PackageName: DisplayDeck
+PackageUrl: https://github.com/richfaris/DisplayDeck
+License: MIT
+LicenseUrl: https://github.com/richfaris/DisplayDeck/blob/main/LICENSE
+ShortDescription: A fast, modern Windows display switcher with one-click multi-monitor profiles.
+Description: >-
+  DisplayDeck lets you change resolution, refresh rate, orientation, and your
+  primary monitor instantly, and save entire multi-monitor layouts as profiles
+  you can apply in one click. Summon it with a global hotkey; every change is
+  protected by a 15-second auto-revert.
+Moniker: displaydeck
+Tags:
+  - display
+  - monitor
+  - resolution
+  - refresh-rate
+  - multi-monitor
+  - productivity
+ManifestType: defaultLocale
+ManifestVersion: 1.6.0
