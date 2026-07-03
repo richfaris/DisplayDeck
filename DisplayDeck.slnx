@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DisplayDeck.App/DisplayDeck.App.csproj" />
+    <Project Path="src/DisplayDeck.Core/DisplayDeck.Core.csproj" />
+  </Folder>
+</Solution>

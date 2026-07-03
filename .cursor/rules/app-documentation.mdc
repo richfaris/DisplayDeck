@@ -1,0 +1,38 @@
+---
+description: Every app must ship Getting Started, Roadmap & Maintenance, and Source & Builder pages as in-app documentation
+alwaysApply: true
+---
+
+# In-app documentation pages
+
+Every application I build must include three pieces of user-facing documentation,
+built into the app itself (e.g. as navigation pages/tabs), so they can be shown
+or hidden later as needed. If the app has no GUI, provide them as `docs/` markdown
+files instead.
+
+## 1. Getting Started
+A short, task-focused quick start: what the app is in one line, then the few
+steps a new user needs (how to open it, do the core action, and the key
+shortcuts). Keep it simple and scannable.
+
+## 2. Roadmap & Maintenance
+Two parts:
+- **Roadmap** — what's shipped now, what's next, and what's planned later.
+- **Maintenance** — practical notes for keeping it running over time: how to
+  update the runtime/dependencies, what to do when the environment or hardware
+  changes, where logs/diagnostics live, key internals to look at, and known
+  limitations.
+
+## 3. Source & Builder (About)
+A page that helps me find and improve the app later (I rely on this for memory):
+- **Builder** (e.g. "Cursor") and the AI assistant/tools used.
+- **Source files location** — the project/repo path, baked in at build time, with a
+  button to open the folder (and to open it in the builder/editor).
+- **Currently running from** — the live executable location.
+- Persist this to disk and **auto-update it when the app is launched from a new
+  location** (in case the files are moved), showing a note when the path changed.
+
+## Rules
+- Prefer real in-app pages (navigation entries) over external files for GUI apps.
+- Make them easy to hide/remove without breaking the app.
+- Keep pages updated as features ship — move items from "next" to "shipped".

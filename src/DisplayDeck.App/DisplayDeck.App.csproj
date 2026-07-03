@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\DisplayDeck.Core\DisplayDeck.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="WPF-UI" Version="4.3.0" />
+  </ItemGroup>
+
+  <!-- Avoid ambiguity between WinForms and WPF types; use the WinForms alias instead. -->
+  <ItemGroup>
+    <Using Remove="System.Windows.Forms" />
+  </ItemGroup>
+
+  <!-- Bake the source location + builder into the assembly so the About page can
+       always point back to where this app can be edited/improved. -->
+  <PropertyGroup>
+    <RepoRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\..'))</RepoRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <AssemblyMetadata Include="SourceRoot" Value="$(RepoRoot)" />
+    <AssemblyMetadata Include="Builder" Value="Cursor" />
+    <AssemblyMetadata Include="AIAssistant" Value="Claude (Anthropic), via Cursor" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <NoWarn>$(NoWarn);WFO0003</NoWarn>
+
+    <!-- Product identity + version (overridable at publish time with -p:Version=x.y.z). -->
+    <AssemblyName>DisplayDeck</AssemblyName>
+    <Product>DisplayDeck</Product>
+    <Version>0.2.0</Version>
+  </PropertyGroup>
+
+  <!-- Self-contained single-file publish defaults (used by `dotnet publish` / CI). -->
+  <PropertyGroup Condition="'$(PublishSingleFile)' == 'true'">
+    <SelfContained>true</SelfContained>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <DebugType>none</DebugType>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+  </PropertyGroup>
+
+</Project>

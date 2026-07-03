@@ -1,0 +1,95 @@
+<UserControl x:Class="DisplayDeck.App.Views.GettingStartedView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             mc:Ignorable="d" d:DesignHeight="760" d:DesignWidth="900">
+
+    <UserControl.Resources>
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Margin" Value="0,0,0,16" />
+            <Setter Property="Padding" Value="22,18" />
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+        <Style x:Key="H2" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+        <Style x:Key="Step" TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Margin" Value="0,0,0,8" />
+            <Setter Property="Opacity" Value="0.85" />
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,8,28,24">
+        <StackPanel MaxWidth="820" HorizontalAlignment="Left">
+
+            <TextBlock Text="Getting Started" FontSize="30" FontWeight="Bold" Margin="0,8,0,4" />
+            <TextBlock Text="DisplayDeck lets you change your display settings faster than the Windows Settings app — pop it up, tweak, done."
+                       Opacity="0.7" FontSize="14" TextWrapping="Wrap" Margin="0,0,0,20" />
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource H2}" Text="Open it instantly" />
+                    <TextBlock Style="{StaticResource Step}">
+                        <Run FontWeight="SemiBold" Text="Press Ctrl + Alt + D" /> from anywhere to summon the window (centered on the monitor your mouse is on).
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource Step}" Text="• Or click the DisplayDeck icon in your system tray (bottom-right of the taskbar)." />
+                    <TextBlock Style="{StaticResource Step}" Text="• Press Esc, or press the hotkey again, to tuck it back into the tray. It stays running so it's always instant." />
+                    <TextBlock Style="{StaticResource Step}" Text="• If Ctrl+Alt+D is taken by another app, DisplayDeck auto-picks a fallback — hover the tray icon to see the active shortcut." />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource H2}" Text="Change a display (Displays tab)" />
+                    <TextBlock Style="{StaticResource Step}">
+                        1. Each connected monitor has its own card showing its name and current settings.
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource Step}">
+                        2. <Run FontWeight="SemiBold" Text="Pick a Resolution or Refresh rate" /> from the dropdown — it applies instantly.
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource Step}">
+                        3. A bar slides up: <Run FontWeight="SemiBold" Text="Keep changes?" /> If you don't confirm within 15 seconds, it automatically reverts — so a bad mode can never leave you stuck on a black screen.
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource Step}" Text="4. Use Rotate 90° to change orientation, or Make primary to move the taskbar/Start to that monitor." />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource H2}" Text="The arrangement map" />
+                    <TextBlock Style="{StaticResource Step}" Text="The colored panel shows your monitors laid out exactly as Windows sees them. The one with the gold star is your primary display. (Drag-to-arrange is on the roadmap.)" />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource H2}" Text="Save &amp; switch setups (Profiles tab)" />
+                    <TextBlock Style="{StaticResource Step}">
+                        1. Arrange your displays how you like, open the <Run FontWeight="SemiBold" Text="Profiles" /> tab, give it a name (e.g. Work, Gaming, Movie) and hit <Run FontWeight="SemiBold" Text="Save current setup" />.
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource Step}" Text="2. Later, click Apply on any profile to snap every monitor back to that exact configuration (resolution, refresh, orientation, positions, primary)." />
+                    <TextBlock Style="{StaticResource Step}" Text="3. Apply profiles without even opening the window: right-click the tray icon → Apply a profile. You still get the 15-second safety revert." />
+                    <TextBlock Style="{StaticResource Step}" Text="• Click a profile's name to rename it; use the trash button to delete it." />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource H2}" Text="Good to know" />
+                    <TextBlock Style="{StaticResource Step}" Text="• Closing the window doesn't quit the app — it hides to the tray. To fully exit, right-click the tray icon → Exit." />
+                    <TextBlock Style="{StaticResource Step}" Text="• DisplayDeck changes anything Windows exposes: resolution, refresh rate, color depth, orientation, primary, and positions." />
+                    <TextBlock Style="{StaticResource Step}" Text="• Toggle light/dark with the button at the bottom of the navigation rail." />
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

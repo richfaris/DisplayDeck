@@ -1,0 +1,17 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Pp]ublish/
+*.user
+
+# Rider / VS
+.vs/
+.idea/
+
+# Logs & local artifacts
+*.log
+tools/*.png
+
+# OS
+Thumbs.db
+.DS_Store

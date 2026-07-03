@@ -1,0 +1,164 @@
+<UserControl x:Class="DisplayDeck.App.Views.RoadmapView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             mc:Ignorable="d" d:DesignHeight="760" d:DesignWidth="900">
+
+    <UserControl.Resources>
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="CornerRadius" Value="12" />
+            <Setter Property="Margin" Value="0,0,0,16" />
+            <Setter Property="Padding" Value="22,18" />
+            <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource CardStrokeColorDefaultBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+        <Style x:Key="H2" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+        <Style x:Key="Item" TargetType="TextBlock">
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="Margin" Value="0,0,0,7" />
+            <Setter Property="Opacity" Value="0.85" />
+        </Style>
+        <Style x:Key="Pill" TargetType="Border">
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="8,2" />
+            <Setter Property="Margin" Value="0,0,0,12" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,8,28,24">
+        <StackPanel MaxWidth="820" HorizontalAlignment="Left">
+
+            <TextBlock Text="Roadmap &amp; Maintenance" FontSize="30" FontWeight="Bold" Margin="0,8,0,4" />
+            <TextBlock Text="Where DisplayDeck is headed, and what you'll need to know to keep it running over time."
+                       Opacity="0.7" FontSize="14" TextWrapping="Wrap" Margin="0,0,0,20" />
+
+            <!-- Roadmap -->
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <Border Style="{StaticResource Pill}" Background="#2E7D32">
+                        <TextBlock Text="SHIPPED · v0.2" Foreground="White" FontSize="10" FontWeight="Bold" />
+                    </Border>
+                    <TextBlock Style="{StaticResource Item}" Text="• Detect all displays with real monitor names, current + supported modes." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Visual arrangement map to scale, with primary indicator." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Instant apply: resolution, refresh rate, orientation, make-primary." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Profiles — save your whole multi-monitor setup as named presets and apply them in one click, from the app or the tray." />
+                    <TextBlock Style="{StaticResource Item}" Text="• 15-second 'keep changes?' auto-revert safety net on every change (including profile applies)." />
+                    <TextBlock Style="{StaticResource Item}" Text="• System tray + global hotkey (Ctrl+Alt+D) with fallbacks; hide-to-tray." />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <Border Style="{StaticResource Pill}" Background="{DynamicResource SystemAccentColorSecondaryBrush}">
+                        <TextBlock Text="NEXT" Foreground="White" FontSize="10" FontWeight="Bold" />
+                    </Border>
+                    <TextBlock Style="{StaticResource Item}" Text="• Per-profile global hotkeys; double-click .ddp files to apply; run a profile at Windows startup." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Enable/disable displays as part of a profile (currently profiles cover mode, position, orientation and primary)." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Drag-to-arrange monitors directly on the map." />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <Border Style="{StaticResource Pill}" Background="#5A5A5A">
+                        <TextBlock Text="LATER" Foreground="White" FontSize="10" FontWeight="Bold" />
+                    </Border>
+                    <TextBlock Style="{StaticResource Item}" Text="• Automation — auto-apply a profile when monitors connect/disconnect (dock/undock, TV plugged in)." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Per-app profiles — switch settings when a game/app launches, restore on exit." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Hardware controls via DDC/CI — brightness, contrast, input-source switching, color temperature." />
+                    <TextBlock Style="{StaticResource Item}" Text="• HDR on/off per monitor; command-line interface; signed installer." />
+                </StackPanel>
+            </Border>
+
+            <!-- Getting it out into the world -->
+            <TextBlock Text="Getting it out into the world (options)" FontSize="22" FontWeight="Bold" Margin="0,10,0,4" />
+            <TextBlock Text="Ways to share or sell this app. These are options to pick from later — none are required to keep using it yourself."
+                       Opacity="0.7" FontSize="14" TextWrapping="Wrap" Margin="0,0,0,12" />
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource H2}" Text="Foundations (needed either way)" />
+                    <TextBlock Style="{StaticResource Item}" Text="• Ship as a self-contained single .exe so users install nothing (already wired via GitHub Actions — see below)." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Code signing is the #1 trust hurdle: unsigned apps trigger SmartScreen 'unknown publisher' warnings. Options: SignPath (free for open source), Azure Trusted Signing (~$10/mo, supports individuals), or an OV cert (~$100–200/yr)." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Basics: a unique name (trademark-check it), an app icon, a one-line pitch, and a short demo GIF + 2–3 screenshots." />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <Border Style="{StaticResource Pill}" Background="#2E7D32">
+                        <TextBlock Text="OPTION A · OPEN SOURCE" Foreground="White" FontSize="10" FontWeight="Bold" />
+                    </Border>
+                    <TextBlock Style="{StaticResource Item}" Text="Best for building a visible reputation as a builder, globally." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Public GitHub repo, MIT license, a strong README (hero GIF, why-it-exists, install steps), and a 'Built with Cursor' note." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Auto-build signed releases on every tag (GitHub Actions); publish winget + Scoop manifests so people install with one command." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Launch where builders gather: Show HN (Hacker News), relevant subreddits, and a short X/LinkedIn thread with the GIF." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Optional income on top: GitHub Sponsors, or a free core + paid 'Pro' build." />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <Border Style="{StaticResource Pill}" Background="{DynamicResource SystemAccentColorSecondaryBrush}">
+                        <TextBlock Text="OPTION B · SELL IT" Foreground="White" FontSize="10" FontWeight="Bold" />
+                    </Border>
+                    <TextBlock Style="{StaticResource Item}" Text="• Microsoft Store ($19 one-time dev account) handles trust, signing, updates and payments — lowest-friction paid channel for a small Windows utility." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Direct sales via Gumroad / Lemon Squeezy / Paddle (Paddle &amp; Lemon Squeezy act as merchant of record and handle global VAT)." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Realistic pricing: free core + $5–10 one-time 'Pro' (automation, per-profile hotkeys), or a small one-time price. Volume comes from the free tier + word of mouth." />
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource H2}" Text="Recommendation" />
+                    <TextBlock Style="{StaticResource Item}" Text="Do both: open-source under MIT for reputation and reach (winget + GitHub Releases), then add an optional paid Pro tier or Sponsors later. For a solo builder, open-source-first is what actually builds a name; revenue is a nice secondary." />
+                </StackPanel>
+            </Border>
+
+            <!-- Maintenance -->
+            <TextBlock Text="Maintenance" FontSize="22" FontWeight="Bold" Margin="0,10,0,12" />
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource H2}" Text="Runtime &amp; updates" />
+                    <TextBlock Style="{StaticResource Item}" Text="• Built on .NET 10 (LTS). Ships self-contained, so end users install nothing — the runtime is bundled in the executable." />
+                    <TextBlock Style="{StaticResource Item}" Text="• To move to a newer .NET later: update the TargetFramework in the .csproj files and re-publish. No code changes usually needed." />
+                    <TextBlock Style="{StaticResource Item}">
+                        • Rebuild from source: <Run FontWeight="SemiBold" Text="dotnet build" />. Produce a distributable: <Run FontWeight="SemiBold" Text="dotnet publish -c Release -r win-x64 --self-contained -p:PublishSingleFile=true" />.
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource H2}" Text="New monitors or a new PC" />
+                    <TextBlock Style="{StaticResource Item}" Text="• No updates needed when you add/replace monitors — DisplayDeck reads available modes from Windows live, every time it opens." />
+                    <TextBlock Style="{StaticResource Item}">
+                        • Profiles are portable JSON files under <Run FontWeight="SemiBold" Text="%LOCALAPPDATA%\DisplayDeck\Profiles" /> (.ddp) — copy them to another machine with the same monitor models.
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource Card}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource H2}" Text="Troubleshooting &amp; internals" />
+                    <TextBlock Style="{StaticResource Item}">
+                        • A diagnostic log is written to <Run FontWeight="SemiBold" Text="%LOCALAPPDATA%\DisplayDeck\log.txt" /> (hotkey registration, apply results, errors).
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource Item}" Text="• Windows display APIs used: ChangeDisplaySettingsEx and the CCD API (QueryDisplayConfig / SetDisplayConfig). If a future Windows build changes behavior, the interop lives in DisplayDeck.Core/Interop." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Dependencies: WPF-UI (Fluent theme) and CommunityToolkit.Mvvm. Update with 'dotnet add package'; watch for major-version breaking changes." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Known limits: HDR/scaling toggles are pending; vendor-only features (NVIDIA/Intel/AMD panel extras) aren't exposed by Windows APIs and can't be changed programmatically." />
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

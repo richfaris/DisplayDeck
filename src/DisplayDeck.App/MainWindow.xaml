@@ -1,0 +1,176 @@
+﻿<ui:FluentWindow x:Class="DisplayDeck.App.MainWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:local="clr-namespace:DisplayDeck.App"
+                 xmlns:views="clr-namespace:DisplayDeck.App.Views"
+                 xmlns:vm="clr-namespace:DisplayDeck.App.ViewModels"
+                 mc:Ignorable="d"
+                 Title="DisplayDeck"
+                 Width="1180" Height="760"
+                 MinWidth="920" MinHeight="600"
+                 WindowStartupLocation="CenterScreen"
+                 WindowBackdropType="Mica"
+                 ExtendsContentIntoTitleBar="True"
+                 d:DataContext="{d:DesignInstance vm:MainViewModel}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Grid.Row="0" Title="DisplayDeck" Grid.ColumnSpan="2">
+            <ui:TitleBar.Icon>
+                <ui:SymbolIcon Symbol="Desktop24" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="240" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Navigation rail -->
+            <Border Grid.Column="0" Margin="8,0,0,8" CornerRadius="10"
+                    Background="{DynamicResource ControlFillColorDefaultBrush}"
+                    BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1">
+                <DockPanel Margin="12,16,12,12">
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="6,0,0,20">
+                        <ui:SymbolIcon Symbol="Desktop24" FontSize="22"
+                                       Foreground="{DynamicResource SystemAccentColorSecondaryBrush}" />
+                        <TextBlock Text="DisplayDeck" FontSize="18" FontWeight="SemiBold"
+                                   Margin="10,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <StackPanel DockPanel.Dock="Bottom">
+                        <ToggleButton x:Name="ThemeToggle" Content="Toggle theme"
+                                      Click="OnToggleTheme" HorizontalAlignment="Stretch"
+                                      Margin="0,4" />
+                        <TextBlock Text="v0.2 · Profiles" FontSize="11" Opacity="0.5"
+                                   Margin="6,8,0,0" />
+                    </StackPanel>
+
+                    <StackPanel>
+                        <RadioButton Style="{StaticResource NavItemStyle}" GroupName="Nav"
+                                     Tag="displays" IsChecked="True" Checked="OnNavChanged">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Symbol="Desktop24" FontSize="18" />
+                                <TextBlock Text="Displays" Margin="12,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton Style="{StaticResource NavItemStyle}" GroupName="Nav"
+                                     Tag="profiles" Checked="OnNavChanged">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Symbol="Save24" FontSize="18" />
+                                <TextBlock Text="Profiles" Margin="12,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton Style="{StaticResource NavItemStyle}" GroupName="Nav" IsEnabled="False">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Symbol="Flash24" FontSize="18" />
+                                <TextBlock Text="Automation" Margin="12,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton Style="{StaticResource NavItemStyle}" GroupName="Nav" IsEnabled="False">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Symbol="Options24" FontSize="18" />
+                                <TextBlock Text="Hardware" Margin="12,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton Style="{StaticResource NavItemStyle}" GroupName="Nav" IsEnabled="False">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Symbol="Settings24" FontSize="18" />
+                                <TextBlock Text="Settings" Margin="12,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </RadioButton>
+
+                        <Border Height="1" Margin="6,12"
+                                Background="{DynamicResource CardStrokeColorDefaultBrush}" />
+
+                        <RadioButton Style="{StaticResource NavItemStyle}" GroupName="Nav"
+                                     Tag="start" Checked="OnNavChanged">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Symbol="Rocket24" FontSize="18" />
+                                <TextBlock Text="Getting Started" Margin="12,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton Style="{StaticResource NavItemStyle}" GroupName="Nav"
+                                     Tag="roadmap" Checked="OnNavChanged">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Symbol="Map24" FontSize="18" />
+                                <TextBlock Text="Roadmap &amp; Maintenance" Margin="12,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton Style="{StaticResource NavItemStyle}" GroupName="Nav"
+                                     Tag="about" Checked="OnNavChanged">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Symbol="Info24" FontSize="18" />
+                                <TextBlock Text="Source &amp; Builder" Margin="12,0,0,0" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </RadioButton>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <!-- Main content (pages) + global overlays that must show on any page -->
+            <Grid Grid.Column="1">
+                <ContentControl x:Name="ContentHost" />
+
+                <!-- Auto-revert confirmation: dimmed backdrop + centered dialog so it can't be missed -->
+                <Grid Panel.ZIndex="100"
+                      Visibility="{Binding IsConfirmPending, Converter={StaticResource BoolToVisibility}}">
+                    <Border Background="#B0000000" />
+                    <Border VerticalAlignment="Center" HorizontalAlignment="Center"
+                            MinWidth="460" MaxWidth="560" CornerRadius="16" Padding="28,24"
+                            Background="{DynamicResource ApplicationBackgroundBrush}"
+                            BorderBrush="{DynamicResource SystemAccentColorSecondaryBrush}"
+                            BorderThickness="1.5">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="40" ShadowDepth="0" Opacity="0.55" Color="Black" />
+                        </Border.Effect>
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                <ui:SymbolIcon Symbol="CheckmarkCircle24" FontSize="26"
+                                               Foreground="{DynamicResource SystemAccentColorSecondaryBrush}" />
+                                <TextBlock Text="Keep this display change?" FontSize="20" FontWeight="Bold"
+                                           VerticalAlignment="Center" Margin="12,0,0,0" />
+                            </StackPanel>
+
+                            <TextBlock Text="{Binding ConfirmMessage}" FontSize="14" TextWrapping="Wrap"
+                                       Opacity="0.9" Margin="0,0,0,6" />
+
+                            <TextBlock FontSize="13" Opacity="0.7" TextWrapping="Wrap">
+                                <Run Text="If you don't confirm, it reverts to your previous settings in" />
+                                <Run Text="{Binding CountdownSeconds}" FontWeight="Bold"
+                                     Foreground="{DynamicResource SystemAccentColorSecondaryBrush}" />
+                                <Run Text="seconds." />
+                            </TextBlock>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,22,0,0">
+                                <ui:Button Content="Revert" MinWidth="110" Padding="16,8"
+                                           Command="{Binding RevertChangesCommand}" />
+                                <ui:Button Content="Keep changes" Appearance="Primary" MinWidth="150" Padding="16,8"
+                                           Margin="12,0,0,0" FontWeight="SemiBold"
+                                           Command="{Binding KeepChangesCommand}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <!-- Status toast -->
+                <Border VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,20"
+                        CornerRadius="10" Padding="16,10"
+                        Background="{DynamicResource ControlFillColorDefaultBrush}"
+                        BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1"
+                        Visibility="{Binding IsStatusVisible, Converter={StaticResource BoolToVisibility}}">
+                    <TextBlock Text="{Binding StatusMessage}" />
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</ui:FluentWindow>
