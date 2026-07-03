@@ -46,6 +46,8 @@ public partial class MainWindow
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
+        ClampToWorkArea();
+
         var gesture = _hotkey?.ActiveGesture;
         Log.Write($"Window loaded. Active gesture = {gesture ?? "(none)"}");
 
@@ -199,9 +201,21 @@ public partial class MainWindow
 
     private void CenterOnCursorScreen()
     {
-        // WorkArea is in device-independent units relative to the primary monitor,
-        // which guarantees a visible placement regardless of per-monitor DPI.
+        ClampToWorkArea();
+    }
+
+    /// <summary>
+    /// Keep the window no larger than the available work area (so a tall default size
+    /// never opens off-screen on smaller or scaled displays), then center it.
+    /// WorkArea is in device-independent units, so this is DPI-safe.
+    /// </summary>
+    private void ClampToWorkArea()
+    {
         var wa = SystemParameters.WorkArea;
+
+        if (Width > wa.Width) Width = wa.Width;
+        if (Height > wa.Height) Height = wa.Height;
+
         double w = ActualWidth > 0 ? ActualWidth : Width;
         double h = ActualHeight > 0 ? ActualHeight : Height;
 

@@ -45,7 +45,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisplayApplyHost
     [ObservableProperty] private int _countdownSeconds;
 
     public double MapCanvasWidth { get; } = 620;
-    public double MapCanvasHeight { get; } = 340;
+    public double MapCanvasHeight { get; } = 300;
 
     [RelayCommand]
     public void Refresh()

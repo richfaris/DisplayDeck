@@ -9,7 +9,7 @@
                  xmlns:vm="clr-namespace:DisplayDeck.App.ViewModels"
                  mc:Ignorable="d"
                  Title="DisplayDeck"
-                 Width="1180" Height="760"
+                 Width="1240" Height="960"
                  MinWidth="920" MinHeight="600"
                  WindowStartupLocation="CenterScreen"
                  WindowBackdropType="Mica"

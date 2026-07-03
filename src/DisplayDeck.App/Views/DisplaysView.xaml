@@ -10,7 +10,7 @@
              d:DesignHeight="760" d:DesignWidth="900">
 
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,8,28,90">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="28,8,28,24">
             <StackPanel>
 
                 <!-- Header -->
