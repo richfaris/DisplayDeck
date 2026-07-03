@@ -104,6 +104,14 @@ public sealed partial class MainViewModel : ObservableObject, IDisplayApplyHost
     /// </summary>
     public void ApplyProfileWithRevert(DisplayProfile profile)
     {
+        // If the profile already matches the live setup, applying it would do nothing —
+        // tell the user instead of popping a misleading "keep changes?" dialog.
+        if (Profiles.MatchesCurrent(profile))
+        {
+            ShowStatus($"\u201C{profile.Name}\u201D already matches your current setup \u2014 nothing to change.", isError: false);
+            return;
+        }
+
         var snapshot = Profiles.CaptureCurrent("Previous configuration");
 
         ApplyWithRevert(

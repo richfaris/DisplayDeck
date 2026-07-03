@@ -109,6 +109,38 @@ public sealed class ProfileService
         return _control.ApplyProfile(profile, current);
     }
 
+    /// <summary>
+    /// True when every display in the profile already matches the current live configuration
+    /// (mode, orientation, position, primary) — i.e. applying it would change nothing.
+    /// </summary>
+    public bool MatchesCurrent(DisplayProfile profile)
+    {
+        var current = _displays.GetDisplays();
+
+        foreach (var e in profile.Displays)
+        {
+            var d = current.FirstOrDefault(c =>
+                        !string.IsNullOrEmpty(e.MonitorDeviceId) &&
+                        string.Equals(c.MonitorDeviceId, e.MonitorDeviceId, StringComparison.OrdinalIgnoreCase))
+                    ?? current.FirstOrDefault(c =>
+                        string.Equals(c.DeviceName, e.DeviceName, StringComparison.OrdinalIgnoreCase));
+
+            if (d is null)
+                return false; // a display in the profile isn't present -> not an exact match
+
+            int w = d.CurrentMode?.Width ?? 0;
+            int h = d.CurrentMode?.Height ?? 0;
+            int hz = d.CurrentMode?.RefreshRate ?? 0;
+
+            if (w != e.Width || h != e.Height || hz != e.RefreshRate) return false;
+            if ((int)d.Orientation != (int)e.Orientation) return false;
+            if (d.PositionX != e.PositionX || d.PositionY != e.PositionY) return false;
+            if (d.IsPrimary != e.IsPrimary) return false;
+        }
+
+        return true;
+    }
+
     private string PathFor(DisplayProfile profile) =>
         Path.Combine(ProfilesDirectory, $"{profile.Id}.ddp");
 }
