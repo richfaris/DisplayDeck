@@ -51,8 +51,15 @@
                     <TextBlock Style="{StaticResource FieldLabel}" Text="BUILDER" />
                     <TextBlock Style="{StaticResource FieldValue}" Text="{Binding Builder}" />
 
+                    <TextBlock Style="{StaticResource FieldLabel}" Text="GITHUB REPOSITORY" />
+                    <TextBlock Style="{StaticResource FieldValue}" Text="{Binding RepositoryUrl}"
+                               FontFamily="Cascadia Mono, Consolas" />
+                    <ui:Button Content="Open on GitHub" Icon="{ui:SymbolIcon Open24}"
+                               Command="{Binding OpenRepositoryCommand}" IsEnabled="{Binding HasRepository}"
+                               HorizontalAlignment="Left" Margin="0,0,0,14" />
+
                     <TextBlock Style="{StaticResource FieldLabel}" Text="AI ASSISTANT" />
-                    <TextBlock Style="{StaticResource FieldValue}" Text="{Binding AIAssistant}" />
+                    <TextBlock Style="{StaticResource FieldValue}" Text="{Binding AIAssistant}" Margin="0" />
                 </StackPanel>
             </Border>
 

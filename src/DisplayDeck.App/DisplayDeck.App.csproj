@@ -23,6 +23,8 @@
     <AssemblyMetadata Include="SourceRoot" Value="$(RepoRoot)" />
     <AssemblyMetadata Include="Builder" Value="Cursor" />
     <AssemblyMetadata Include="AIAssistant" Value="Claude (Anthropic), via Cursor" />
+    <!-- Fallback repo URL; the app prefers the live git remote when source is present. -->
+    <AssemblyMetadata Include="Repository" Value="https://github.com/richfaris/DisplayDeck" />
   </ItemGroup>
 
   <PropertyGroup>

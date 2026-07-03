@@ -26,6 +26,10 @@ Two parts:
 ## 3. Source & Builder (About)
 A page that helps me find and improve the app later (I rely on this for memory):
 - **Builder** (e.g. "Cursor") and the AI assistant/tools used.
+- **Repository** — the source-control/GitHub repository URL, shown right after the
+  builder, with a button to open it in the browser. Auto-detect it from the local git
+  remote ("origin") when the source is present, with a baked-in fallback; never rely on
+  a hand-typed value that can go stale.
 - **Source files location** — the project/repo path, baked in at build time, with a
   button to open the folder (and to open it in the builder/editor).
 - **Currently running from** — the live executable location.

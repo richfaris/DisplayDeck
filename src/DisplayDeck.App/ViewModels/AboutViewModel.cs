@@ -17,6 +17,8 @@ public sealed partial class AboutViewModel : ObservableObject
 
     public string Builder => _info.Builder;
     public string AIAssistant => string.IsNullOrWhiteSpace(_info.AIAssistant) ? "—" : _info.AIAssistant;
+    public string RepositoryUrl => string.IsNullOrWhiteSpace(_info.RepositoryUrl) ? "—" : _info.RepositoryUrl;
+    public bool HasRepository => !string.IsNullOrWhiteSpace(_info.RepositoryUrl);
     public string SourceRoot => _info.SourceRoot;
     public string RunLocation => _info.RunLocation;
     public string FirstSeen => _info.FirstSeen;
@@ -44,6 +46,19 @@ public sealed partial class AboutViewModel : ObservableObject
             catch { /* ignore */ }
             return "—";
         }
+    }
+
+    [RelayCommand]
+    private void OpenRepository()
+    {
+        if (!HasRepository)
+            return;
+
+        try
+        {
+            Process.Start(new ProcessStartInfo(_info.RepositoryUrl) { UseShellExecute = true });
+        }
+        catch { /* ignore */ }
     }
 
     [RelayCommand]
