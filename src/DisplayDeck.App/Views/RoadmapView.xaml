@@ -48,7 +48,9 @@
                     </Border>
                     <TextBlock Style="{StaticResource Item}" Text="• Detect all displays with real monitor names, current + supported modes." />
                     <TextBlock Style="{StaticResource Item}" Text="• Visual arrangement map to scale, with primary indicator." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Drag-to-arrange: drag monitors on the map to reposition them, with edge snapping and auto-revert." />
                     <TextBlock Style="{StaticResource Item}" Text="• Instant apply: resolution, refresh rate, orientation, make-primary." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Per-monitor scaling (DPI) — pick any scale Windows supports on each display; saved in profiles too." />
                     <TextBlock Style="{StaticResource Item}" Text="• Profiles — save your whole multi-monitor setup as named presets and apply them in one click, from the app or the tray." />
                     <TextBlock Style="{StaticResource Item}" Text="• 15-second 'keep changes?' auto-revert safety net on every change (including profile applies)." />
                     <TextBlock Style="{StaticResource Item}" Text="• System tray + global hotkey (Ctrl+Alt+D) with fallbacks; hide-to-tray." />
@@ -62,7 +64,6 @@
                     </Border>
                     <TextBlock Style="{StaticResource Item}" Text="• Per-profile global hotkeys; double-click .ddp files to apply; run a profile at Windows startup." />
                     <TextBlock Style="{StaticResource Item}" Text="• Enable/disable displays as part of a profile (currently profiles cover mode, position, orientation and primary)." />
-                    <TextBlock Style="{StaticResource Item}" Text="• Drag-to-arrange monitors directly on the map." />
                 </StackPanel>
             </Border>
 

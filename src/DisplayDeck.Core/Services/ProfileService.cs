@@ -16,11 +16,13 @@ public sealed class ProfileService
 
     private readonly DisplayService _displays;
     private readonly DisplayControlService _control;
+    private readonly DpiScalingService _dpi;
 
-    public ProfileService(DisplayService displays, DisplayControlService control)
+    public ProfileService(DisplayService displays, DisplayControlService control, DpiScalingService dpi)
     {
         _displays = displays;
         _control = control;
+        _dpi = dpi;
     }
 
     /// <summary>Folder where profiles live. Created on demand.</summary>
@@ -49,6 +51,7 @@ public sealed class ProfileService
                 PositionY = d.PositionY,
                 Orientation = d.Orientation,
                 IsPrimary = d.IsPrimary,
+                ScalingPercent = d.SupportsScaling ? d.ScalingPercent : 0,
             });
         }
 
@@ -106,7 +109,32 @@ public sealed class ProfileService
     public ChangeResult Apply(DisplayProfile profile)
     {
         var current = _displays.GetDisplays();
-        return _control.ApplyProfile(profile, current);
+        var result = _control.ApplyProfile(profile, current);
+
+        // Scaling is a separate CCD operation from the mode/position commit; apply it
+        // best-effort for each profile display that stored a scale and is connected.
+        foreach (var e in profile.Displays)
+        {
+            if (e.ScalingPercent <= 0)
+                continue;
+
+            var device = ResolveDeviceName(e, current);
+            if (device is not null)
+                _dpi.SetScaling(device, e.ScalingPercent);
+        }
+
+        return result;
+    }
+
+    /// <summary>Match a saved entry to a live device name: prefer hardware id, fall back to GDI name.</summary>
+    private static string? ResolveDeviceName(DisplayProfileEntry entry, IReadOnlyList<DisplayInfo> current)
+    {
+        var d = current.FirstOrDefault(c =>
+                    !string.IsNullOrEmpty(entry.MonitorDeviceId) &&
+                    string.Equals(c.MonitorDeviceId, entry.MonitorDeviceId, StringComparison.OrdinalIgnoreCase))
+                ?? current.FirstOrDefault(c =>
+                    string.Equals(c.DeviceName, entry.DeviceName, StringComparison.OrdinalIgnoreCase));
+        return d?.DeviceName;
     }
 
     /// <summary>
@@ -136,6 +164,8 @@ public sealed class ProfileService
             if ((int)d.Orientation != (int)e.Orientation) return false;
             if (d.PositionX != e.PositionX || d.PositionY != e.PositionY) return false;
             if (d.IsPrimary != e.IsPrimary) return false;
+            // Only compare scaling when the profile captured it (older profiles store 0).
+            if (e.ScalingPercent > 0 && d.SupportsScaling && d.ScalingPercent != e.ScalingPercent) return false;
         }
 
         return true;

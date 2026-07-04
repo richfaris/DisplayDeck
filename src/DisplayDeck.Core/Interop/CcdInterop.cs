@@ -13,6 +13,10 @@ internal static class CcdInterop
     public const int DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME = 1;
     public const int DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME = 2;
 
+    // Undocumented (but stable and widely used) device-info types for per-monitor DPI scaling.
+    public const int DISPLAYCONFIG_DEVICE_INFO_GET_DPI_SCALE = -3;
+    public const int DISPLAYCONFIG_DEVICE_INFO_SET_DPI_SCALE = -4;
+
     public const int ERROR_SUCCESS = 0;
 
     [DllImport("user32.dll")]
@@ -35,6 +39,12 @@ internal static class CcdInterop
 
     [DllImport("user32.dll")]
     public static extern int DisplayConfigGetDeviceInfo(ref DISPLAYCONFIG_SOURCE_DEVICE_NAME requestPacket);
+
+    [DllImport("user32.dll")]
+    public static extern int DisplayConfigGetDeviceInfo(ref DISPLAYCONFIG_SOURCE_DPI_SCALE_GET requestPacket);
+
+    [DllImport("user32.dll")]
+    public static extern int DisplayConfigSetDeviceInfo(ref DISPLAYCONFIG_SOURCE_DPI_SCALE_SET setPacket);
 }
 
 [StructLayout(LayoutKind.Sequential)]
@@ -164,4 +174,22 @@ internal struct DISPLAYCONFIG_SOURCE_DEVICE_NAME
 
     [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
     public string viewGdiDeviceName;
+}
+
+// Per-monitor DPI scaling. curScaleRel/min/max are offsets relative to the display's
+// "recommended" scale within the standard Windows scale ladder (100..500%).
+[StructLayout(LayoutKind.Sequential)]
+internal struct DISPLAYCONFIG_SOURCE_DPI_SCALE_GET
+{
+    public DISPLAYCONFIG_DEVICE_INFO_HEADER header;
+    public int minScaleRel;
+    public int curScaleRel;
+    public int maxScaleRel;
+}
+
+[StructLayout(LayoutKind.Sequential)]
+internal struct DISPLAYCONFIG_SOURCE_DPI_SCALE_SET
+{
+    public DISPLAYCONFIG_DEVICE_INFO_HEADER header;
+    public int scaleRel;
 }

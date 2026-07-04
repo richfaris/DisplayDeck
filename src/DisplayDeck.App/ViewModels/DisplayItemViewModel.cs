@@ -23,6 +23,7 @@ public sealed partial class DisplayItemViewModel : ObservableObject
                 .OrderByDescending(r => r.PixelCount));
 
         RefreshOptions = new ObservableCollection<int>();
+        ScalingOptions = new ObservableCollection<int>(info.ScalingOptions);
 
         _suppressApply = true;
         SelectedResolution = ResolutionOptions.FirstOrDefault(r =>
@@ -30,6 +31,9 @@ public sealed partial class DisplayItemViewModel : ObservableObject
             ?? ResolutionOptions.FirstOrDefault();
         RebuildRefreshOptions();
         SelectedRefresh = info.CurrentMode?.RefreshRate ?? RefreshOptions.FirstOrDefault();
+        SelectedScaling = ScalingOptions.Contains(info.ScalingPercent)
+            ? info.ScalingPercent
+            : ScalingOptions.FirstOrDefault();
         _suppressApply = false;
     }
 
@@ -48,14 +52,23 @@ public sealed partial class DisplayItemViewModel : ObservableObject
     public string PositionText => $"({Info.PositionX}, {Info.PositionY})";
     public int SupportedModeCount => Info.SupportedModes.Count;
 
+    public bool SupportsScaling => Info.SupportsScaling && Info.ScalingOptions.Count > 1;
+    public string ScalingHint => Info.SupportsScaling
+        ? $"Recommended {Info.RecommendedScalingPercent}%"
+        : "Scaling not available for this display";
+
     public ObservableCollection<ResolutionOption> ResolutionOptions { get; }
     public ObservableCollection<int> RefreshOptions { get; }
+    public ObservableCollection<int> ScalingOptions { get; }
 
     [ObservableProperty]
     private ResolutionOption? _selectedResolution;
 
     [ObservableProperty]
     private int _selectedRefresh;
+
+    [ObservableProperty]
+    private int _selectedScaling;
 
     partial void OnSelectedResolutionChanged(ResolutionOption? value)
     {
@@ -127,5 +140,13 @@ public sealed partial class DisplayItemViewModel : ObservableObject
             return;
 
         ApplyCurrentSelection();
+    }
+
+    partial void OnSelectedScalingChanged(int value)
+    {
+        if (_suppressApply || value <= 0 || value == Info.ScalingPercent)
+            return;
+
+        _host.RequestSetScaling(this, value);
     }
 }

@@ -27,6 +27,9 @@ public sealed class DisplayProfileEntry
 
     public bool IsPrimary { get; set; }
 
+    /// <summary>Per-monitor scaling percentage (0 = not captured, for older profiles).</summary>
+    public int ScalingPercent { get; set; }
+
     public string ResolutionLabel => $"{Width} × {Height}";
 }
 

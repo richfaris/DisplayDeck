@@ -53,7 +53,7 @@
                         1. Each connected monitor has its own card showing its name and current settings.
                     </TextBlock>
                     <TextBlock Style="{StaticResource Step}">
-                        2. <Run FontWeight="SemiBold" Text="Pick a Resolution or Refresh rate" /> from the dropdown — it applies instantly.
+                        2. <Run FontWeight="SemiBold" Text="Pick a Resolution, Refresh rate, or Scale (DPI)" /> from the dropdown — it applies instantly. The recommended scale is shown under each Scale box.
                     </TextBlock>
                     <TextBlock Style="{StaticResource Step}">
                         3. A bar slides up: <Run FontWeight="SemiBold" Text="Keep changes?" /> If you don't confirm within 15 seconds, it automatically reverts — so a bad mode can never leave you stuck on a black screen.
@@ -65,7 +65,8 @@
             <Border Style="{StaticResource Card}">
                 <StackPanel>
                     <TextBlock Style="{StaticResource H2}" Text="The arrangement map" />
-                    <TextBlock Style="{StaticResource Step}" Text="The colored panel shows your monitors laid out exactly as Windows sees them. The one with the gold star is your primary display. (Drag-to-arrange is on the roadmap.)" />
+                    <TextBlock Style="{StaticResource Step}" Text="The colored panel shows your monitors laid out exactly as Windows sees them. The one with the gold star is your primary display." />
+                    <TextBlock Style="{StaticResource Step}" Text="Drag any monitor to reposition it — it snaps flush against its neighbour, then you get 15 seconds to keep or revert the new layout." />
                 </StackPanel>
             </Border>
 
@@ -75,7 +76,7 @@
                     <TextBlock Style="{StaticResource Step}">
                         1. Arrange your displays how you like, open the <Run FontWeight="SemiBold" Text="Profiles" /> tab, give it a name (e.g. Work, Gaming, Movie) and hit <Run FontWeight="SemiBold" Text="Save current setup" />.
                     </TextBlock>
-                    <TextBlock Style="{StaticResource Step}" Text="2. Later, click Apply on any profile to snap every monitor back to that exact configuration (resolution, refresh, orientation, positions, primary)." />
+                    <TextBlock Style="{StaticResource Step}" Text="2. Later, click Apply on any profile to snap every monitor back to that exact configuration (resolution, refresh, orientation, positions, primary, and per-monitor scaling)." />
                     <TextBlock Style="{StaticResource Step}" Text="3. Apply profiles without even opening the window: right-click the tray icon → Apply a profile. You still get the 15-second safety revert." />
                     <TextBlock Style="{StaticResource Step}" Text="• Click a profile's name to rename it; use the trash button to delete it." />
                 </StackPanel>

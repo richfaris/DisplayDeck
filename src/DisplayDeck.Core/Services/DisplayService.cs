@@ -9,6 +9,8 @@ namespace DisplayDeck.Core.Services;
 /// </summary>
 public sealed class DisplayService
 {
+    private readonly DpiScalingService _dpi = new();
+
     /// <summary>Enumerate all displays currently attached to the desktop.</summary>
     public IReadOnlyList<DisplayInfo> GetDisplays()
     {
@@ -36,6 +38,8 @@ public sealed class DisplayService
             var (monitorName, monitorId) = GetMonitorSubDevice(adapter.DeviceName);
             friendlyNames.TryGetValue(adapter.DeviceName, out var edidName);
 
+            var scaling = _dpi.GetScaling(adapter.DeviceName);
+
             var info = new DisplayInfo
             {
                 DeviceName = adapter.DeviceName,
@@ -49,6 +53,10 @@ public sealed class DisplayService
                 Orientation = orientation,
                 CurrentMode = current,
                 SupportedModes = modes,
+                ScalingPercent = scaling.Current,
+                RecommendedScalingPercent = scaling.Recommended,
+                ScalingOptions = scaling.Options,
+                SupportsScaling = scaling.IsSupported,
             };
 
             results.Add(info);

@@ -13,6 +13,8 @@ public interface IDisplayApplyHost
     void RequestSetPrimary(DisplayItemViewModel item);
 
     void RequestRotate(DisplayItemViewModel item, DisplayOrientation orientation);
+
+    void RequestSetScaling(DisplayItemViewModel item, int percent);
 }
 
 /// <summary>A selectable resolution (grouped across refresh rates).</summary>

@@ -4,6 +4,16 @@
     <ProjectReference Include="..\DisplayDeck.Core\DisplayDeck.Core.csproj" />
   </ItemGroup>
 
+  <!-- App / taskbar / Explorer icon, plus an embedded copy for the tray. -->
+  <PropertyGroup>
+    <ApplicationIcon>Assets\DisplayDeck.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\DisplayDeck.ico">
+      <LogicalName>DisplayDeck.ico</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="WPF-UI" Version="4.3.0" />

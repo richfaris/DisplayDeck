@@ -34,9 +34,14 @@
                         BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}"
                         BorderThickness="1">
                     <StackPanel Margin="20,16,20,20">
-                        <TextBlock Text="ARRANGEMENT" FontSize="11" FontWeight="SemiBold"
-                                   Opacity="0.55" Margin="2,0,0,12" />
-                        <Border CornerRadius="10" ClipToBounds="True"
+                        <Grid Margin="2,0,0,12">
+                            <TextBlock Text="ARRANGEMENT" FontSize="11" FontWeight="SemiBold"
+                                       Opacity="0.55" VerticalAlignment="Center" />
+                            <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center"
+                                       Opacity="0.5" FontSize="11"
+                                       Text="Drag a monitor to rearrange — you'll get 15s to confirm." />
+                        </Grid>
+                        <Border x:Name="MapHost" CornerRadius="10" ClipToBounds="True"
                                 Background="{DynamicResource ControlFillColorSecondaryBrush}"
                                 Width="{Binding MapCanvasWidth}" Height="{Binding MapCanvasHeight}"
                                 HorizontalAlignment="Center">
@@ -56,7 +61,11 @@
                                     <DataTemplate DataType="{x:Type vm:DisplayItemViewModel}">
                                         <Border Width="{Binding MapWidth}" Height="{Binding MapHeight}"
                                                 CornerRadius="8" Margin="3" BorderThickness="1.5"
-                                                BorderBrush="{DynamicResource SystemAccentColorSecondaryBrush}">
+                                                BorderBrush="{DynamicResource SystemAccentColorSecondaryBrush}"
+                                                Cursor="SizeAll"
+                                                MouseLeftButtonDown="OnTileMouseDown"
+                                                MouseMove="OnTileMouseMove"
+                                                MouseLeftButtonUp="OnTileMouseUp">
                                             <Border.Background>
                                                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
                                                     <GradientStop Color="#2F6BFF" Offset="0" />
@@ -64,11 +73,15 @@
                                                 </LinearGradientBrush>
                                             </Border.Background>
                                             <Grid>
-                                                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                    <TextBlock Text="{Binding ShortName}" Foreground="White"
-                                                               FontWeight="Bold" FontSize="15" HorizontalAlignment="Center" />
+                                                <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                                                            Margin="10,0">
+                                                    <TextBlock Text="{Binding Label}" Foreground="White"
+                                                               FontWeight="Bold" FontSize="13" TextAlignment="Center"
+                                                               TextTrimming="CharacterEllipsis" />
+                                                    <TextBlock Text="{Binding ShortName}" Foreground="#CCFFFFFF"
+                                                               FontSize="10" TextAlignment="Center" Margin="0,1,0,0" />
                                                     <TextBlock Text="{Binding ResolutionText}" Foreground="#DDFFFFFF"
-                                                               FontSize="11" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                                                               FontSize="11" TextAlignment="Center" Margin="0,3,0,0" />
                                                 </StackPanel>
                                                 <ui:SymbolIcon Symbol="Star24" Filled="True" Foreground="Gold"
                                                                FontSize="16" Margin="6"
@@ -141,7 +154,23 @@
                                         </StackPanel>
                                     </Grid>
 
-                                    <TextBlock Margin="2,8,0,0" Opacity="0.5" FontSize="11"
+                                    <!-- Scale (per-monitor DPI) -->
+                                    <StackPanel Margin="0,12,0,0"
+                                                Visibility="{Binding SupportsScaling, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="Scale (DPI)" Opacity="0.6" Margin="2,0,0,4" FontSize="12" />
+                                        <ComboBox ItemsSource="{Binding ScalingOptions}"
+                                                  SelectedItem="{Binding SelectedScaling}"
+                                                  HorizontalAlignment="Stretch">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding StringFormat='{}{0}%'}" />
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                        <TextBlock Text="{Binding ScalingHint}" Opacity="0.5" FontSize="11" Margin="2,4,0,0" />
+                                    </StackPanel>
+
+                                    <TextBlock Margin="2,10,0,0" Opacity="0.5" FontSize="11"
                                                Text="Changes apply instantly — you'll get 15s to confirm." />
 
                                     <StackPanel Orientation="Horizontal" Margin="0,14,0,0">

@@ -140,6 +140,28 @@ public partial class MainWindow
 
     private static Drawing.Icon CreateAppIcon()
     {
+        // Prefer the embedded brand mark so the tray matches the taskbar/Explorer icon.
+        try
+        {
+            var asm = System.Reflection.Assembly.GetExecutingAssembly();
+            using var stream = asm.GetManifestResourceStream("DisplayDeck.ico");
+            if (stream is not null)
+            {
+                // Ask for the exact tray size so Windows uses the crisp small-icon variant.
+                var size = WinForms.SystemInformation.SmallIconSize;
+                return new Drawing.Icon(stream, size);
+            }
+        }
+        catch (Exception ex)
+        {
+            Log.Write($"CreateAppIcon: falling back to drawn icon ({ex.Message}).");
+        }
+
+        return DrawFallbackIcon();
+    }
+
+    private static Drawing.Icon DrawFallbackIcon()
+    {
         using var bmp = new Drawing.Bitmap(32, 32);
         using (var g = Drawing.Graphics.FromImage(bmp))
         {

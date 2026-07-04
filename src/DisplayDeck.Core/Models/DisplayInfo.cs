@@ -32,6 +32,18 @@ public sealed class DisplayInfo
 
     public IReadOnlyList<DisplayMode> SupportedModes { get; init; } = Array.Empty<DisplayMode>();
 
+    /// <summary>Current per-monitor scaling percentage (e.g. 150).</summary>
+    public int ScalingPercent { get; init; } = 100;
+
+    /// <summary>The OS-recommended scaling percentage for this display.</summary>
+    public int RecommendedScalingPercent { get; init; } = 100;
+
+    /// <summary>Scaling percentages Windows allows for this display.</summary>
+    public IReadOnlyList<int> ScalingOptions { get; init; } = Array.Empty<int>();
+
+    /// <summary>True when per-monitor scaling could be read and can be changed.</summary>
+    public bool SupportsScaling { get; init; }
+
     /// <summary>Best label to show the user: friendly name if known, else adapter/device.</summary>
     public string DisplayLabel =>
         !string.IsNullOrWhiteSpace(FriendlyName) ? FriendlyName

@@ -1,5 +1,7 @@
 # DisplayDeck
 
+<img src="assets/logo.png" alt="DisplayDeck logo" width="112" align="right" />
+
 **A fast, modern Windows display switcher.** Change resolution, refresh rate, orientation, and your primary monitor in one place — then save whole multi-monitor layouts as profiles and snap back to them in a single click. Summon it instantly with a global hotkey, and every change is protected by a 15-second auto-revert so a bad mode can never leave you stranded.
 
 [![CI](https://github.com/richfaris/DisplayDeck/actions/workflows/ci.yml/badge.svg)](https://github.com/richfaris/DisplayDeck/actions/workflows/ci.yml)
@@ -14,9 +16,11 @@ The Windows Settings app is slow to open and clunky for anything beyond a single
 
 ## Features
 
-- **Instant apply** — pick a resolution or refresh rate and it changes immediately; rotate or set the primary monitor with one button.
+- **Instant apply** — pick a resolution, refresh rate, or scale and it changes immediately; rotate or set the primary monitor with one button.
+- **Per-monitor scaling (DPI)** — choose any scale Windows supports for each display (100%, 125%, 150% …), with the recommended value shown. Saved in profiles too.
+- **Drag-to-arrange** — drag monitors on the visual map to reposition them, with edge snapping and the same auto-revert safety net.
 - **15-second auto-revert** — every change pops a clear "Keep this change?" dialog with a countdown, so an unsupported mode reverts automatically.
-- **Profiles** — save your entire multi-monitor setup (resolution, refresh, color depth, orientation, positions, and primary) as a named preset and apply it in one click.
+- **Profiles** — save your entire multi-monitor setup (resolution, refresh, color depth, orientation, positions, primary, and per-monitor scaling) as a named preset and apply it in one click.
 - **Apply from anywhere** — right-click the tray icon to apply a profile or save the current setup without even opening the window.
 - **Global hotkey** — `Ctrl + Alt + D` summons the window centered on your active screen (with automatic fallbacks if that combo is taken).
 - **Real monitor names** — resolves friendly EDID names (e.g. "DELL U2723QE") via the Windows CCD API, and matches profiles back to hardware by monitor ID.
@@ -51,7 +55,7 @@ scoop install https://raw.githubusercontent.com/richfaris/DisplayDeck/main/packa
 
 1. Launch DisplayDeck — it starts in the system tray.
 2. Press **`Ctrl + Alt + D`** (or click the tray icon) to open it.
-3. On **Displays**, pick a resolution/refresh from a monitor's card — it applies instantly. Confirm **Keep changes** within 15 seconds.
+3. On **Displays**, pick a resolution/refresh/scale from a monitor's card, or drag a monitor on the map to rearrange — it applies instantly. Confirm **Keep changes** within 15 seconds.
 4. On **Profiles**, name your current arrangement and hit **Save current setup**. Apply it later from the app or the tray menu.
 5. Press **Esc** (or the hotkey again) to tuck it back into the tray. Right-click the tray icon → **Exit** to quit fully.
 
@@ -76,12 +80,12 @@ The release pipeline does this automatically — push a version tag (`git tag v0
 ## How it works
 
 - **UI:** .NET 10 WPF with [WPF-UI](https://github.com/lepoco/wpfui) (Fluent theme) and [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet).
-- **Display control:** Win32 `ChangeDisplaySettingsEx` for applying modes/orientation/primary/positions, and the CCD API (`QueryDisplayConfig`) for friendly monitor names. All interop lives in `src/DisplayDeck.Core/Interop`.
+- **Display control:** Win32 `ChangeDisplaySettingsEx` for applying modes/orientation/primary/positions, and the CCD API (`QueryDisplayConfig` / `DisplayConfigGetDeviceInfo`) for friendly monitor names and per-monitor DPI scaling. All interop lives in `src/DisplayDeck.Core/Interop`.
 - **Profiles:** stored as portable `.ddp` JSON files under `%LOCALAPPDATA%\DisplayDeck\Profiles`.
 
 ## Roadmap
 
-Shipped, next, and planned items — plus maintenance notes — are documented on the in-app **Roadmap & Maintenance** page. Highlights coming next: per-profile hotkeys, `.ddp` file association, run-at-startup, and drag-to-arrange monitors on the map.
+Shipped, next, and planned items — plus maintenance notes — are documented on the in-app **Roadmap & Maintenance** page. Highlights coming next: per-profile hotkeys, `.ddp` file association, run-at-startup, and auto-applying a profile when monitors connect/disconnect.
 
 ## Built with
 

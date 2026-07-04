@@ -13,6 +13,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisplayApplyHost
 
     private readonly DisplayService _displayService = new();
     private readonly DisplayControlService _controlService = new();
+    private readonly DpiScalingService _scalingService = new();
     private readonly DispatcherTimer _revertTimer;
 
     private Action? _revertAction;
@@ -20,7 +21,7 @@ public sealed partial class MainViewModel : ObservableObject, IDisplayApplyHost
     public MainViewModel()
     {
         Displays = new ObservableCollection<DisplayItemViewModel>();
-        Profiles = new ProfileService(_displayService, _controlService);
+        Profiles = new ProfileService(_displayService, _controlService, _scalingService);
         _revertTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         _revertTimer.Tick += OnRevertTick;
         Refresh();
@@ -47,14 +48,29 @@ public sealed partial class MainViewModel : ObservableObject, IDisplayApplyHost
     public double MapCanvasWidth { get; } = 620;
     public double MapCanvasHeight { get; } = 300;
 
+    // Last transform used by ArrangeMap, so drag positions can be converted back to
+    // real desktop coordinates (map px -> real px).
+    private double _mapScale = 1;
+    private double _mapOffsetX;
+    private double _mapOffsetY;
+    private int _mapMinX;
+    private int _mapMinY;
+
     [RelayCommand]
     public void Refresh()
     {
         DisplayDeck.App.Services.Log.Write("Refresh command executed.");
         var displays = _displayService.GetDisplays();
 
+        // Order the cards to mirror the physical layout (left-to-right, then top-to-bottom)
+        // so they stay in the same relationship as the arrangement map after a rearrange.
+        var ordered = displays
+            .OrderBy(d => d.PositionX)
+            .ThenBy(d => d.PositionY)
+            .ToList();
+
         Displays.Clear();
-        foreach (var d in displays)
+        foreach (var d in ordered)
             Displays.Add(new DisplayItemViewModel(d, this));
 
         SelectedDisplay = Displays.FirstOrDefault(d => d.IsPrimary) ?? Displays.FirstOrDefault();
@@ -96,6 +112,20 @@ public sealed partial class MainViewModel : ObservableObject, IDisplayApplyHost
             $"Rotated {item.Label} to {Describe(orientation)}.",
             () => _controlService.SetOrientation(device, orientation),
             () => _controlService.SetOrientation(device, previous));
+    }
+
+    public void RequestSetScaling(DisplayItemViewModel item, int percent)
+    {
+        int previous = item.Info.ScalingPercent;
+        if (percent == previous)
+            return;
+
+        string device = item.Info.DeviceName;
+
+        ApplyWithRevert(
+            $"Set {item.Label} scaling to {percent}%.",
+            () => _scalingService.SetScaling(device, percent),
+            () => _scalingService.SetScaling(device, previous));
     }
 
     /// <summary>
@@ -237,6 +267,13 @@ public sealed partial class MainViewModel : ObservableObject, IDisplayApplyHost
         double offsetX = padding + (availW - spanX * scale) / 2;
         double offsetY = padding + (availH - spanY * scale) / 2;
 
+        // Remember the transform so drag deltas can be mapped back to real coordinates.
+        _mapScale = scale;
+        _mapOffsetX = offsetX;
+        _mapOffsetY = offsetY;
+        _mapMinX = minX;
+        _mapMinY = minY;
+
         foreach (var vm in Displays)
         {
             var info = vm.Info;
@@ -245,5 +282,114 @@ public sealed partial class MainViewModel : ObservableObject, IDisplayApplyHost
             vm.MapWidth = Math.Max(28, Math.Max(1, info.Width) * scale);
             vm.MapHeight = Math.Max(20, Math.Max(1, info.Height) * scale);
         }
+    }
+
+    /// <summary>Re-snap the map tiles to the live desktop layout (undo a partial drag).</summary>
+    public void SnapMapBack() => ArrangeMap(Displays.Select(d => d.Info).ToList());
+
+    /// <summary>
+    /// Commit a drag on the arrangement map. The dragged tile's map position is converted
+    /// back to real desktop pixels, snapped so it sits flush against its nearest neighbour
+    /// (Windows requires a gap-free, non-overlapping desktop), then applied to all displays
+    /// with the usual 15-second auto-revert safety net.
+    /// </summary>
+    public void CommitDragArrange(DisplayItemViewModel dragged)
+    {
+        if (Displays.Count < 2 || _mapScale <= 0)
+        {
+            SnapMapBack();
+            return;
+        }
+
+        // Tentative real top-left of the dragged monitor, derived from its map position.
+        double tentX = _mapMinX + (dragged.MapLeft - _mapOffsetX) / _mapScale;
+        double tentY = _mapMinY + (dragged.MapTop - _mapOffsetY) / _mapScale;
+
+        int dw = Math.Max(1, dragged.Info.Width);
+        int dh = Math.Max(1, dragged.Info.Height);
+        double dcx = tentX + dw / 2.0;
+        double dcy = tentY + dh / 2.0;
+
+        // Anchor to the nearest other monitor (by centre distance).
+        DisplayItemViewModel? anchor = null;
+        double best = double.MaxValue;
+        foreach (var other in Displays)
+        {
+            if (ReferenceEquals(other, dragged))
+                continue;
+
+            double ocx = other.Info.PositionX + Math.Max(1, other.Info.Width) / 2.0;
+            double ocy = other.Info.PositionY + Math.Max(1, other.Info.Height) / 2.0;
+            double dist = (dcx - ocx) * (dcx - ocx) + (dcy - ocy) * (dcy - ocy);
+            if (dist < best)
+            {
+                best = dist;
+                anchor = other;
+            }
+        }
+
+        if (anchor is null)
+        {
+            SnapMapBack();
+            return;
+        }
+
+        int ow = Math.Max(1, anchor.Info.Width);
+        int oh = Math.Max(1, anchor.Info.Height);
+        int ox = anchor.Info.PositionX;
+        int oy = anchor.Info.PositionY;
+        double anchorCx = ox + ow / 2.0;
+        double anchorCy = oy + oh / 2.0;
+
+        // Snap flush to whichever edge of the anchor the drag points toward.
+        int nx, ny;
+        if (Math.Abs(dcx - anchorCx) >= Math.Abs(dcy - anchorCy))
+        {
+            nx = dcx >= anchorCx ? ox + ow : ox - dw; // right or left
+            ny = oy;                                   // top-aligned
+        }
+        else
+        {
+            ny = dcy >= anchorCy ? oy + oh : oy - dh;  // below or above
+            nx = ox;                                   // left-aligned
+        }
+
+        var positions = new Dictionary<string, (int X, int Y)>(StringComparer.OrdinalIgnoreCase);
+        foreach (var d in Displays)
+            positions[d.Info.DeviceName] = (d.Info.PositionX, d.Info.PositionY);
+        positions[dragged.Info.DeviceName] = (nx, ny);
+
+        // Windows anchors the primary display at (0,0); normalise everything relative to it.
+        var primary = Displays.FirstOrDefault(d => d.IsPrimary) ?? Displays[0];
+        var (px, py) = positions[primary.Info.DeviceName];
+        if (px != 0 || py != 0)
+        {
+            foreach (var key in positions.Keys.ToList())
+            {
+                var v = positions[key];
+                positions[key] = (v.X - px, v.Y - py);
+            }
+        }
+
+        bool changed = Displays.Any(d =>
+        {
+            var (x, y) = positions[d.Info.DeviceName];
+            return x != d.Info.PositionX || y != d.Info.PositionY;
+        });
+
+        if (!changed)
+        {
+            SnapMapBack();
+            return;
+        }
+
+        var previous = new Dictionary<string, (int X, int Y)>(StringComparer.OrdinalIgnoreCase);
+        foreach (var d in Displays)
+            previous[d.Info.DeviceName] = (d.Info.PositionX, d.Info.PositionY);
+
+        ApplyWithRevert(
+            $"Rearranged {dragged.Label}.",
+            () => _controlService.SetPositions(positions),
+            () => _controlService.SetPositions(previous));
     }
 }
