@@ -7,6 +7,6 @@ Commands:
 Installers:
   - Architecture: x64
     InstallerUrl: https://github.com/richfaris/DisplayDeck/releases/download/v0.3.0/DisplayDeck-v0.3.0-win-x64.exe
-    InstallerSha256: REPLACE_WITH_SHA256_OF_RELEASE_EXE
+    InstallerSha256: 7B56BD4AD705506CE539B298D33BD48D8EF6A71CB0932908E40ADAE2A16C824C
 ManifestType: installer
 ManifestVersion: 1.6.0

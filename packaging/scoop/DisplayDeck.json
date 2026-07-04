@@ -6,7 +6,7 @@
     "architecture": {
         "64bit": {
             "url": "https://github.com/richfaris/DisplayDeck/releases/download/v0.3.0/DisplayDeck-v0.3.0-win-x64.exe#/DisplayDeck.exe",
-            "hash": "REPLACE_WITH_SHA256_OF_RELEASE_EXE"
+            "hash": "7b56bd4ad705506ce539b298d33bd48d8ef6a71cb0932908e40adae2a16c824c"
         }
     },
     "bin": [
