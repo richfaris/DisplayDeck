@@ -53,6 +53,8 @@ scoop install https://raw.githubusercontent.com/richfaris/DisplayDeck/main/packa
 
 ## Getting started
 
+> **Quick run from the repo:** double-click **`startup.ps1`** (Run with PowerShell) to launch it — it won't start a second copy if it's already running — and **`shutdown.ps1`** to stop it.
+
 1. Launch DisplayDeck — it starts in the system tray.
 2. Press **`Ctrl + Alt + D`** (or click the tray icon) to open it.
 3. On **Displays**, pick a resolution/refresh/scale from a monitor's card, or drag a monitor on the map to rearrange — it applies instantly. Confirm **Keep changes** within 15 seconds.
