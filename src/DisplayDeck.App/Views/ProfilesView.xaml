@@ -76,6 +76,17 @@
                                                 BorderThickness="0" Background="Transparent"
                                                 Padding="0" ToolTip="Click to rename" />
                                     <TextBlock Text="{Binding Summary}" Opacity="0.75" FontSize="13" Margin="2,4,0,0" />
+                                    <TextBlock Text="{Binding ScalingSummary}" Opacity="0.6" FontSize="12" Margin="2,3,0,0">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <Trigger Property="Text" Value="">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
                                     <TextBlock Text="{Binding CreatedText}" Opacity="0.45" FontSize="11" Margin="2,2,0,0" />
                                 </StackPanel>
 

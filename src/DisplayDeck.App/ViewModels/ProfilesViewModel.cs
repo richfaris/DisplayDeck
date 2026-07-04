@@ -93,6 +93,28 @@ public sealed partial class ProfileItemViewModel : ObservableObject
 
     public string Summary => Model.Summary;
 
+    /// <summary>Per-monitor scaling captured in this profile, e.g. "Scale · LG ULTRAWIDE 100%, U2723QE 150%".
+    /// Empty for older profiles saved before scaling was captured (so the line hides).</summary>
+    public string ScalingSummary
+    {
+        get
+        {
+            var withScale = Model.Displays.Where(d => d.ScalingPercent > 0).ToList();
+            if (withScale.Count == 0)
+                return string.Empty;
+
+            var parts = withScale.Select(d =>
+            {
+                string name = !string.IsNullOrWhiteSpace(d.FriendlyName)
+                    ? d.FriendlyName
+                    : d.DeviceName.Replace(@"\\.\", string.Empty);
+                return $"{name} {d.ScalingPercent}%";
+            });
+
+            return "Scale · " + string.Join(", ", parts);
+        }
+    }
+
     public string CreatedText =>
         DateTimeOffset.TryParse(Model.Created, out var dt)
             ? $"Saved {dt.LocalDateTime:MMM d, yyyy · h:mm tt}"
