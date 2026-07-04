@@ -49,6 +49,14 @@ public sealed class HotkeyManager : IDisposable
 
     public event Action? Pressed;
 
+    /// <summary>
+    /// Raised once the hotkey has been (attempted to be) registered, with the gesture that
+    /// won — or null if none could register. Fires after the window handle exists, which on
+    /// some window styles happens *after* Loaded, so consumers should prefer this over
+    /// reading <see cref="ActiveGesture"/> at load time.
+    /// </summary>
+    public event Action<string?>? Registered;
+
     /// <summary>The gesture that was successfully registered, or null if none.</summary>
     public string? ActiveGesture { get; private set; }
 
@@ -76,6 +84,7 @@ public sealed class HotkeyManager : IDisposable
                 _registered = true;
                 ActiveGesture = c.Display;
                 Log.Write($"Registered global hotkey: {c.Display}");
+                Registered?.Invoke(ActiveGesture);
                 return;
             }
 
@@ -84,6 +93,7 @@ public sealed class HotkeyManager : IDisposable
         }
 
         Log.Write("Could not register ANY global hotkey. Tray icon will still work.");
+        Registered?.Invoke(null);
     }
 
     private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)

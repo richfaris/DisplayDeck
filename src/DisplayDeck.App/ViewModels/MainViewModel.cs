@@ -9,7 +9,7 @@ namespace DisplayDeck.App.ViewModels;
 
 public sealed partial class MainViewModel : ObservableObject, IDisplayApplyHost
 {
-    private const int RevertSeconds = 15;
+    private const int RevertSeconds = 8;
 
     private readonly DisplayService _displayService = new();
     private readonly DisplayControlService _controlService = new();
@@ -34,6 +34,47 @@ public sealed partial class MainViewModel : ObservableObject, IDisplayApplyHost
 
     [ObservableProperty] private DisplayItemViewModel? _selectedDisplay;
     [ObservableProperty] private string _summaryText = string.Empty;
+
+    /// <summary>The global hotkey that actually registered (may be a fallback). Shown in the
+    /// always-visible Shortcuts card so it's never a mystery which combo is live.</summary>
+    [ObservableProperty] private string _hotkeyGesture = "Ctrl + Alt + D";
+
+    // Fun mode: snap a webcam selfie and show it inside every monitor tile on the map.
+    [ObservableProperty] private bool _isFunMode;
+    [ObservableProperty] private System.Windows.Media.Imaging.BitmapSource? _funModeImage;
+    private bool _suppressFunOffMessage;
+
+    partial void OnIsFunModeChanged(bool value)
+    {
+        if (value)
+        {
+            EnterFunModeAsync();
+            return;
+        }
+
+        FunModeImage = null;
+        if (!_suppressFunOffMessage)
+            ShowStatus("Fun mode off.", isError: false);
+    }
+
+    private async void EnterFunModeAsync()
+    {
+        ShowStatus("Smile! Grabbing a photo from your camera\u2026", isError: false);
+
+        var (image, error) = await Task.Run(DisplayDeck.App.Services.CameraService.TryCapture);
+
+        if (image is null)
+        {
+            _suppressFunOffMessage = true;
+            IsFunMode = false;
+            _suppressFunOffMessage = false;
+            ShowStatus($"Fun mode: {error ?? "couldn't access the camera."}", isError: true);
+            return;
+        }
+
+        FunModeImage = image;
+        ShowStatus("Fun mode on \u2014 that's you on every screen! \U0001F389", isError: false);
+    }
 
     // Toast / status message.
     [ObservableProperty] private string _statusMessage = string.Empty;
@@ -94,13 +135,14 @@ public sealed partial class MainViewModel : ObservableObject, IDisplayApplyHost
 
     public void RequestSetPrimary(DisplayItemViewModel item)
     {
-        var previousPrimary = Displays.FirstOrDefault(d => d.IsPrimary)?.Info.DeviceName;
         string device = item.Info.DeviceName;
 
+        // No auto-revert: making a display primary can't black out a screen — every
+        // monitor stays on, so it's always trivially reversible.
         ApplyWithRevert(
             $"Made {item.Label} the primary display.",
             () => _controlService.SetPrimary(device),
-            previousPrimary is null ? null : () => _controlService.SetPrimary(previousPrimary));
+            revert: null);
     }
 
     public void RequestRotate(DisplayItemViewModel item, DisplayOrientation orientation)
@@ -129,8 +171,10 @@ public sealed partial class MainViewModel : ObservableObject, IDisplayApplyHost
     }
 
     /// <summary>
-    /// Apply a saved profile with the same 15-second auto-revert safety net. The current
-    /// configuration is snapshotted first so we can restore it if the user doesn't confirm.
+    /// Apply a saved profile. When every monitor the profile references is currently
+    /// connected, the machine has already run in exactly this state, so we skip the
+    /// confirm timer. If the hardware differs from when it was saved, we keep the
+    /// 8-second auto-revert as a safety net (a stored mode could blank an unfamiliar panel).
     /// </summary>
     public void ApplyProfileWithRevert(DisplayProfile profile)
     {
@@ -142,12 +186,17 @@ public sealed partial class MainViewModel : ObservableObject, IDisplayApplyHost
             return;
         }
 
-        var snapshot = Profiles.CaptureCurrent("Previous configuration");
+        Action? revert = null;
+        if (!Profiles.AppliesToCurrentHardware(profile))
+        {
+            var snapshot = Profiles.CaptureCurrent("Previous configuration");
+            revert = () => Profiles.Apply(snapshot);
+        }
 
         ApplyWithRevert(
             $"Applied profile \u201C{profile.Name}\u201D.",
             () => Profiles.Apply(profile),
-            () => Profiles.Apply(snapshot));
+            revert);
     }
 
     /// <summary>Show a transient status toast (used by the Profiles page when saving).</summary>
@@ -290,8 +339,8 @@ public sealed partial class MainViewModel : ObservableObject, IDisplayApplyHost
     /// <summary>
     /// Commit a drag on the arrangement map. The dragged tile's map position is converted
     /// back to real desktop pixels, snapped so it sits flush against its nearest neighbour
-    /// (Windows requires a gap-free, non-overlapping desktop), then applied to all displays
-    /// with the usual 15-second auto-revert safety net.
+    /// (Windows requires a gap-free, non-overlapping desktop), then applied to all displays.
+    /// No auto-revert: repositioning never turns a monitor off, so it's always reversible.
     /// </summary>
     public void CommitDragArrange(DisplayItemViewModel dragged)
     {
@@ -383,13 +432,9 @@ public sealed partial class MainViewModel : ObservableObject, IDisplayApplyHost
             return;
         }
 
-        var previous = new Dictionary<string, (int X, int Y)>(StringComparer.OrdinalIgnoreCase);
-        foreach (var d in Displays)
-            previous[d.Info.DeviceName] = (d.Info.PositionX, d.Info.PositionY);
-
         ApplyWithRevert(
             $"Rearranged {dragged.Label}.",
             () => _controlService.SetPositions(positions),
-            () => _controlService.SetPositions(previous));
+            revert: null);
     }
 }

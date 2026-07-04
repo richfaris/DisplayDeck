@@ -1,5 +1,5 @@
 ---
-description: Every app must ship Getting Started, Roadmap & Maintenance, and Source & Builder pages as in-app documentation
+description: Every app must ship Getting Started, Roadmap & Maintenance, Source & Builder pages plus an always-visible keyboard-shortcuts reference
 alwaysApply: true
 ---
 
@@ -7,8 +7,8 @@ alwaysApply: true
 
 Every application I build must include three pieces of user-facing documentation,
 built into the app itself (e.g. as navigation pages/tabs), so they can be shown
-or hidden later as needed. If the app has no GUI, provide them as `docs/` markdown
-files instead.
+or hidden later as needed, plus a keyboard-shortcuts reference (see #4). If the app
+has no GUI, provide the docs as `docs/` markdown files instead.
 
 ## 1. Getting Started
 A short, task-focused quick start: what the app is in one line, then the few
@@ -35,6 +35,17 @@ A page that helps me find and improve the app later (I rely on this for memory):
 - **Currently running from** — the live executable location.
 - Persist this to disk and **auto-update it when the app is launched from a new
   location** (in case the files are moved), showing a note when the path changed.
+
+## 4. Keyboard shortcuts reference (always visible)
+Expose every keyboard shortcut/hotkey in the UI so I never have to remember them:
+- Put it in an **always-visible spot** (e.g. a small card in the sidebar/footer that
+  shows on every screen), not buried on a page. A dedicated page is fine *in addition*,
+  but the quick reference must be glanceable without navigating.
+- List each action with its key(s) shown as key "caps" (e.g. `Esc`, `F5`, `Ctrl + Alt + D`).
+- Show the **live** shortcut, not a hard-coded string: if a global hotkey can fall back
+  to an alternative when its preferred combo is taken, bind the label to the one that
+  actually registered so it's never wrong.
+- Keep it in sync as shortcuts are added/changed; also mention them in Getting Started.
 
 ## Rules
 - Prefer real in-app pages (navigation entries) over external files for GUI apps.

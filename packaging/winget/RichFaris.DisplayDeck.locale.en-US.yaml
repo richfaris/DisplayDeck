@@ -14,7 +14,7 @@ Description: >-
   DisplayDeck lets you change resolution, refresh rate, orientation, and your
   primary monitor instantly, and save entire multi-monitor layouts as profiles
   you can apply in one click. Summon it with a global hotkey; every change is
-  protected by a 15-second auto-revert.
+  protected by an 8-second auto-revert.
 Moniker: displaydeck
 Tags:
   - display

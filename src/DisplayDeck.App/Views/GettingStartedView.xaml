@@ -42,7 +42,8 @@
                     </TextBlock>
                     <TextBlock Style="{StaticResource Step}" Text="• Or click the DisplayDeck icon in your system tray (bottom-right of the taskbar)." />
                     <TextBlock Style="{StaticResource Step}" Text="• Press Esc, or press the hotkey again, to tuck it back into the tray. It stays running so it's always instant." />
-                    <TextBlock Style="{StaticResource Step}" Text="• If Ctrl+Alt+D is taken by another app, DisplayDeck auto-picks a fallback — hover the tray icon to see the active shortcut." />
+                    <TextBlock Style="{StaticResource Step}" Text="• If Ctrl+Alt+D is taken by another app, DisplayDeck auto-picks a fallback — the live shortcut is always shown in the SHORTCUTS card at the bottom of the left sidebar (and on the tray icon tooltip)." />
+                    <TextBlock Style="{StaticResource Step}" Text="• Press F5 anytime to refresh the detected displays." />
                 </StackPanel>
             </Border>
 
@@ -56,7 +57,7 @@
                         2. <Run FontWeight="SemiBold" Text="Pick a Resolution, Refresh rate, or Scale (DPI)" /> from the dropdown — it applies instantly. The recommended scale is shown under each Scale box.
                     </TextBlock>
                     <TextBlock Style="{StaticResource Step}">
-                        3. A bar slides up: <Run FontWeight="SemiBold" Text="Keep changes?" /> If you don't confirm within 15 seconds, it automatically reverts — so a bad mode can never leave you stuck on a black screen.
+                        3. A bar slides up: <Run FontWeight="SemiBold" Text="Keep changes?" /> If you don't confirm within 8 seconds, it automatically reverts — so a bad mode can never leave you stuck on a black screen.
                     </TextBlock>
                     <TextBlock Style="{StaticResource Step}" Text="4. Use Rotate 90° to change orientation, or Make primary to move the taskbar/Start to that monitor." />
                 </StackPanel>
@@ -66,7 +67,7 @@
                 <StackPanel>
                     <TextBlock Style="{StaticResource H2}" Text="The arrangement map" />
                     <TextBlock Style="{StaticResource Step}" Text="The colored panel shows your monitors laid out exactly as Windows sees them. The one with the gold star is your primary display." />
-                    <TextBlock Style="{StaticResource Step}" Text="Drag any monitor to reposition it — it snaps flush against its neighbour, then you get 15 seconds to keep or revert the new layout." />
+                    <TextBlock Style="{StaticResource Step}" Text="Drag any monitor to reposition it — it snaps flush against its neighbour and applies instantly (no confirm needed, since moving a monitor can't black out a screen)." />
                 </StackPanel>
             </Border>
 
@@ -77,7 +78,7 @@
                         1. Arrange your displays how you like, open the <Run FontWeight="SemiBold" Text="Profiles" /> tab, give it a name (e.g. Work, Gaming, Movie) and hit <Run FontWeight="SemiBold" Text="Save current setup" />.
                     </TextBlock>
                     <TextBlock Style="{StaticResource Step}" Text="2. Later, click Apply on any profile to snap every monitor back to that exact configuration (resolution, refresh, orientation, positions, primary, and per-monitor scaling)." />
-                    <TextBlock Style="{StaticResource Step}" Text="3. Apply profiles without even opening the window: right-click the tray icon → Apply a profile. You still get the 15-second safety revert." />
+                    <TextBlock Style="{StaticResource Step}" Text="3. Apply profiles without even opening the window: right-click the tray icon → Apply a profile. Applies instantly when those monitors are connected; if the hardware differs from when it was saved, you still get the 8-second safety revert." />
                     <TextBlock Style="{StaticResource Step}" Text="• Click a profile's name to rename it; use the trash button to delete it." />
                 </StackPanel>
             </Border>

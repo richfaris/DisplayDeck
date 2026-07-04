@@ -51,18 +51,27 @@ public partial class MainWindow
 
         Log.Write($"MainWindow constructed. startHidden={_startHidden}");
 
+        SetupTrayIcon();
+
         _hotkey = new HotkeyManager(this);
         _hotkey.Pressed += ToggleWindow;
-
-        SetupTrayIcon();
+        // The handle (and thus registration) can come up after Loaded on this window style,
+        // so update the Shortcuts card + tray from the registration event, not OnLoaded.
+        _hotkey.Registered += OnHotkeyRegistered;
+        // Cover the (rare) case where the handle already existed and registration ran
+        // synchronously inside the constructor before we subscribed above.
+        if (_hotkey.ActiveGesture is not null)
+            OnHotkeyRegistered(_hotkey.ActiveGesture);
 
         Loaded += OnLoaded;
     }
 
-    private void OnLoaded(object sender, RoutedEventArgs e)
+    private void OnHotkeyRegistered(string? gesture)
     {
-        var gesture = _hotkey?.ActiveGesture;
-        Log.Write($"Window loaded. Active gesture = {gesture ?? "(none)"}, startHidden={_startHidden}");
+        Log.Write($"Hotkey registered event: {gesture ?? "(none)"}");
+
+        // Surface the live gesture in the always-visible Shortcuts card.
+        _viewModel.HotkeyGesture = gesture ?? "Unavailable";
 
         if (_trayIcon is not null)
         {
@@ -76,6 +85,11 @@ public partial class MainWindow
                 : $"Press {gesture} to open, or click the tray icon.";
             _trayIcon.ShowBalloonTip(4000);
         }
+    }
+
+    private void OnLoaded(object sender, RoutedEventArgs e)
+    {
+        Log.Write($"Window loaded. startHidden={_startHidden}");
 
         if (_startHidden)
             HideApp();      // slip straight into the tray at boot
@@ -137,7 +151,7 @@ public partial class MainWindow
 
     private void ApplyProfileFromTray(DisplayDeck.Core.Models.DisplayProfile profile)
     {
-        // Bring the window up so the 15-second confirm bar is visible, then apply.
+        // Bring the window up so the 8-second confirm bar is visible, then apply.
         ShowApp();
         _viewModel.ApplyProfileWithRevert(profile);
     }
@@ -268,6 +282,13 @@ public partial class MainWindow
         if (e.Key == Key.Escape)
         {
             HideApp();
+            e.Handled = true;
+            return;
+        }
+
+        if (e.Key == Key.F5)
+        {
+            _viewModel.Refresh();
             e.Handled = true;
             return;
         }

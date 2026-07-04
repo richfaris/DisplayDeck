@@ -52,9 +52,10 @@
                     <TextBlock Style="{StaticResource Item}" Text="• Instant apply: resolution, refresh rate, orientation, make-primary." />
                     <TextBlock Style="{StaticResource Item}" Text="• Per-monitor scaling (DPI) — pick any scale Windows supports on each display; saved in profiles too." />
                     <TextBlock Style="{StaticResource Item}" Text="• Profiles — save your whole multi-monitor setup as named presets and apply them in one click, from the app or the tray." />
-                    <TextBlock Style="{StaticResource Item}" Text="• 15-second 'keep changes?' auto-revert safety net on every change (including profile applies)." />
+                    <TextBlock Style="{StaticResource Item}" Text="• 8-second 'keep changes?' auto-revert on risky changes (resolution, refresh, orientation, scaling); safe changes (rearrange, make-primary, re-applying a profile on the same monitors) apply instantly." />
                     <TextBlock Style="{StaticResource Item}" Text="• System tray + global hotkey (Ctrl+Alt+D) with fallbacks; hide-to-tray." />
                     <TextBlock Style="{StaticResource Item}" Text="• Run at Windows startup — install-startup.ps1 launches DisplayDeck straight into the tray on every sign-in." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Fun mode — snaps a webcam selfie and drops it into every monitor tile on the arrangement map. Just for fun; toggle off anytime." />
                 </StackPanel>
             </Border>
 

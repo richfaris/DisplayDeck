@@ -48,10 +48,66 @@
                     </StackPanel>
 
                     <StackPanel DockPanel.Dock="Bottom">
+                        <!-- Always-visible keyboard shortcuts (shows the live global hotkey) -->
+                        <Border CornerRadius="8" Padding="12,10" Margin="0,0,0,10"
+                                Background="{DynamicResource ControlFillColorSecondaryBrush}"
+                                BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                    <ui:SymbolIcon Symbol="Keyboard24" FontSize="14" Opacity="0.7"
+                                                   VerticalAlignment="Center" />
+                                    <TextBlock Text="SHORTCUTS" FontSize="10" FontWeight="SemiBold"
+                                               Opacity="0.55" Margin="7,0,0,0" VerticalAlignment="Center" />
+                                </StackPanel>
+
+                                <Grid Margin="0,3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Open / close" FontSize="11.5" Opacity="0.85"
+                                               VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                    <Border Grid.Column="1" CornerRadius="4" Padding="7,2" Margin="6,0,0,0"
+                                            Background="{DynamicResource ControlFillColorDefaultBrush}"
+                                            BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+                                        <TextBlock Text="{Binding HotkeyGesture}" FontSize="10.5" FontWeight="SemiBold" />
+                                    </Border>
+                                </Grid>
+
+                                <Grid Margin="0,3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Hide to tray" FontSize="11.5" Opacity="0.85"
+                                               VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                    <Border Grid.Column="1" CornerRadius="4" Padding="7,2" Margin="6,0,0,0"
+                                            Background="{DynamicResource ControlFillColorDefaultBrush}"
+                                            BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+                                        <TextBlock Text="Esc" FontSize="10.5" FontWeight="SemiBold" />
+                                    </Border>
+                                </Grid>
+
+                                <Grid Margin="0,3">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Refresh displays" FontSize="11.5" Opacity="0.85"
+                                               VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                    <Border Grid.Column="1" CornerRadius="4" Padding="7,2" Margin="6,0,0,0"
+                                            Background="{DynamicResource ControlFillColorDefaultBrush}"
+                                            BorderBrush="{DynamicResource CardStrokeColorDefaultBrush}" BorderThickness="1">
+                                        <TextBlock Text="F5" FontSize="10.5" FontWeight="SemiBold" />
+                                    </Border>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
                         <ToggleButton x:Name="ThemeToggle" Content="Toggle theme"
                                       Click="OnToggleTheme" HorizontalAlignment="Stretch"
                                       Margin="0,4" />
-                        <TextBlock Text="v0.3 · Scaling &amp; drag" FontSize="11" Opacity="0.5"
+                        <TextBlock Text="v0.4 · Shortcuts &amp; startup" FontSize="11" Opacity="0.5"
                                    Margin="6,8,0,0" />
                     </StackPanel>
 

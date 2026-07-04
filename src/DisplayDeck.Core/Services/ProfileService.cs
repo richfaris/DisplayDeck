@@ -171,6 +171,32 @@ public sealed class ProfileService
         return true;
     }
 
+    /// <summary>
+    /// True when every display the profile references is currently connected (matched by
+    /// stable monitor id, falling back to GDI name only for older profiles that never
+    /// captured one). When true, applying the profile only restores a state this machine
+    /// has already run, so the caller can safely skip the confirm/auto-revert timer.
+    /// </summary>
+    public bool AppliesToCurrentHardware(DisplayProfile profile)
+    {
+        if (profile.Displays.Count == 0)
+            return false;
+
+        var current = _displays.GetDisplays();
+
+        foreach (var e in profile.Displays)
+        {
+            bool present = !string.IsNullOrEmpty(e.MonitorDeviceId)
+                ? current.Any(c => string.Equals(c.MonitorDeviceId, e.MonitorDeviceId, StringComparison.OrdinalIgnoreCase))
+                : current.Any(c => string.Equals(c.DeviceName, e.DeviceName, StringComparison.OrdinalIgnoreCase));
+
+            if (!present)
+                return false;
+        }
+
+        return true;
+    }
+
     private string PathFor(DisplayProfile profile) =>
         Path.Combine(ProfilesDirectory, $"{profile.Id}.ddp");
 }
