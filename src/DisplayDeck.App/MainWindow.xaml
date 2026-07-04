@@ -51,7 +51,7 @@
                         <ToggleButton x:Name="ThemeToggle" Content="Toggle theme"
                                       Click="OnToggleTheme" HorizontalAlignment="Stretch"
                                       Margin="0,4" />
-                        <TextBlock Text="v0.2 · Profiles" FontSize="11" Opacity="0.5"
+                        <TextBlock Text="v0.3 · Scaling &amp; drag" FontSize="11" Opacity="0.5"
                                    Margin="6,8,0,0" />
                     </StackPanel>
 

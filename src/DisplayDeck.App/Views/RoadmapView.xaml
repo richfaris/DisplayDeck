@@ -44,7 +44,7 @@
             <Border Style="{StaticResource Card}">
                 <StackPanel>
                     <Border Style="{StaticResource Pill}" Background="#2E7D32">
-                        <TextBlock Text="SHIPPED · v0.2" Foreground="White" FontSize="10" FontWeight="Bold" />
+                        <TextBlock Text="SHIPPED · v0.3" Foreground="White" FontSize="10" FontWeight="Bold" />
                     </Border>
                     <TextBlock Style="{StaticResource Item}" Text="• Detect all displays with real monitor names, current + supported modes." />
                     <TextBlock Style="{StaticResource Item}" Text="• Visual arrangement map to scale, with primary indicator." />

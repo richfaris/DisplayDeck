@@ -50,7 +50,7 @@
     <!-- Product identity + version (overridable at publish time with -p:Version=x.y.z). -->
     <AssemblyName>DisplayDeck</AssemblyName>
     <Product>DisplayDeck</Product>
-    <Version>0.2.0</Version>
+    <Version>0.3.0</Version>
   </PropertyGroup>
 
   <!-- Self-contained single-file publish defaults (used by `dotnet publish` / CI). -->

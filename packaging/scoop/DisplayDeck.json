@@ -1,11 +1,11 @@
 {
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "A fast, modern Windows display switcher: resolution, refresh, orientation, primary monitor, and one-click multi-monitor profiles.",
     "homepage": "https://github.com/richfaris/DisplayDeck",
     "license": "MIT",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/richfaris/DisplayDeck/releases/download/v0.2.0/DisplayDeck-v0.2.0-win-x64.exe#/DisplayDeck.exe",
+            "url": "https://github.com/richfaris/DisplayDeck/releases/download/v0.3.0/DisplayDeck-v0.3.0-win-x64.exe#/DisplayDeck.exe",
             "hash": "REPLACE_WITH_SHA256_OF_RELEASE_EXE"
         }
     },
