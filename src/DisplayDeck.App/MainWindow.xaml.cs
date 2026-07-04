@@ -18,6 +18,7 @@ public partial class MainWindow
     private HotkeyManager? _hotkey;
     private WinForms.NotifyIcon? _trayIcon;
     private bool _reallyExit;
+    private readonly bool _startHidden;
 
     private DisplaysView? _displaysView;
     private ProfilesView? _profilesView;
@@ -34,7 +35,21 @@ public partial class MainWindow
 
         ContentHost.Content = _displaysView ??= new DisplaysView();
 
-        Log.Write("MainWindow constructed.");
+        // Launched at boot (Startup shortcut) with --tray: initialize into the tray
+        // without flashing the window. We still Show() so the HWND/hotkey come up, but
+        // start minimized + off-taskbar so nothing draws, then hide in OnLoaded.
+        _startHidden = Environment.GetCommandLineArgs()
+            .Any(a => a.Equals("--tray", StringComparison.OrdinalIgnoreCase)
+                   || a.Equals("--startup", StringComparison.OrdinalIgnoreCase)
+                   || a.Equals("--minimized", StringComparison.OrdinalIgnoreCase));
+        if (_startHidden)
+        {
+            ShowActivated = false;
+            WindowState = WindowState.Minimized;
+            ShowInTaskbar = false;
+        }
+
+        Log.Write($"MainWindow constructed. startHidden={_startHidden}");
 
         _hotkey = new HotkeyManager(this);
         _hotkey.Pressed += ToggleWindow;
@@ -46,10 +61,8 @@ public partial class MainWindow
 
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
-        ClampToWorkArea();
-
         var gesture = _hotkey?.ActiveGesture;
-        Log.Write($"Window loaded. Active gesture = {gesture ?? "(none)"}");
+        Log.Write($"Window loaded. Active gesture = {gesture ?? "(none)"}, startHidden={_startHidden}");
 
         if (_trayIcon is not null)
         {
@@ -63,6 +76,11 @@ public partial class MainWindow
                 : $"Press {gesture} to open, or click the tray icon.";
             _trayIcon.ShowBalloonTip(4000);
         }
+
+        if (_startHidden)
+            HideApp();      // slip straight into the tray at boot
+        else
+            ClampToWorkArea();
     }
 
     private void SetupTrayIcon()

@@ -1,4 +1,4 @@
-# startup.ps1 — Start DisplayDeck if it isn't already running.
+# startup.ps1 - Start DisplayDeck if it isn't already running.
 #
 #   Right-click > Run with PowerShell, or:  powershell -ExecutionPolicy Bypass -File startup.ps1
 #

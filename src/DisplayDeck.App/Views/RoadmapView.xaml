@@ -54,6 +54,7 @@
                     <TextBlock Style="{StaticResource Item}" Text="• Profiles — save your whole multi-monitor setup as named presets and apply them in one click, from the app or the tray." />
                     <TextBlock Style="{StaticResource Item}" Text="• 15-second 'keep changes?' auto-revert safety net on every change (including profile applies)." />
                     <TextBlock Style="{StaticResource Item}" Text="• System tray + global hotkey (Ctrl+Alt+D) with fallbacks; hide-to-tray." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Run at Windows startup — install-startup.ps1 launches DisplayDeck straight into the tray on every sign-in." />
                 </StackPanel>
             </Border>
 
@@ -62,7 +63,7 @@
                     <Border Style="{StaticResource Pill}" Background="{DynamicResource SystemAccentColorSecondaryBrush}">
                         <TextBlock Text="NEXT" Foreground="White" FontSize="10" FontWeight="Bold" />
                     </Border>
-                    <TextBlock Style="{StaticResource Item}" Text="• Per-profile global hotkeys; double-click .ddp files to apply; run a profile at Windows startup." />
+                    <TextBlock Style="{StaticResource Item}" Text="• Per-profile global hotkeys; double-click .ddp files to apply; auto-apply a chosen profile at startup." />
                     <TextBlock Style="{StaticResource Item}" Text="• Enable/disable displays as part of a profile (currently profiles cover mode, position, orientation and primary)." />
                 </StackPanel>
             </Border>

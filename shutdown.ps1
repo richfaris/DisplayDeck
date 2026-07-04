@@ -1,4 +1,4 @@
-# shutdown.ps1 — Stop DisplayDeck if it's running.
+# shutdown.ps1 - Stop DisplayDeck if it's running.
 #
 #   Right-click > Run with PowerShell, or:  powershell -ExecutionPolicy Bypass -File shutdown.ps1
 

@@ -54,6 +54,8 @@ scoop install https://raw.githubusercontent.com/richfaris/DisplayDeck/main/packa
 ## Getting started
 
 > **Quick run from the repo:** double-click **`startup.ps1`** (Run with PowerShell) to launch it — it won't start a second copy if it's already running — and **`shutdown.ps1`** to stop it.
+>
+> **Start automatically at sign-in:** run **`install-startup.ps1`** once — it adds a Startup-folder shortcut that launches DisplayDeck straight into the tray (`--tray`) on every reboot. Run **`uninstall-startup.ps1`** to undo it.
 
 1. Launch DisplayDeck — it starts in the system tray.
 2. Press **`Ctrl + Alt + D`** (or click the tray icon) to open it.
@@ -87,7 +89,7 @@ The release pipeline does this automatically — push a version tag (`git tag v0
 
 ## Roadmap
 
-Shipped, next, and planned items — plus maintenance notes — are documented on the in-app **Roadmap & Maintenance** page. Highlights coming next: per-profile hotkeys, `.ddp` file association, run-at-startup, and auto-applying a profile when monitors connect/disconnect.
+Shipped, next, and planned items — plus maintenance notes — are documented on the in-app **Roadmap & Maintenance** page. Highlights coming next: per-profile hotkeys, `.ddp` file association, and auto-applying a profile when monitors connect/disconnect.
 
 ## Built with
 
