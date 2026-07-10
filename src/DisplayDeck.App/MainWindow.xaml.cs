@@ -2,7 +2,9 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Threading;
 using DisplayDeck.App.Services;
 using DisplayDeck.App.ViewModels;
 using DisplayDeck.App.Views;
@@ -275,6 +277,55 @@ public partial class MainWindow
 
         Left = wa.Left + (wa.Width - w) / 2;
         Top = wa.Top + (wa.Height - h) / 2;
+    }
+
+    // A resolution change makes Windows send a display/DPI change notification, after
+    // which WPF sometimes drops cached glyph runs and leaves icon-font glyphs (the Fluent
+    // icons in the sidebar) blank (dotnet/wpf#2255). We hook those messages and force the
+    // whole window to re-render once WPF has finished its own handling.
+    private const int WM_DISPLAYCHANGE = 0x007E;
+    private const int WM_DPICHANGED = 0x02E0;
+
+    protected override void OnSourceInitialized(EventArgs e)
+    {
+        base.OnSourceInitialized(e);
+        (PresentationSource.FromVisual(this) as HwndSource)?.AddHook(WndProc);
+    }
+
+    private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+    {
+        if (msg is WM_DISPLAYCHANGE or WM_DPICHANGED)
+        {
+            Log.Write($"Display/DPI change (msg 0x{msg:X2}) — scheduling re-render to restore icons.");
+            // Don't set handled: WPF still needs to run its own DPI/layout handling.
+            // Re-render after it settles (and again a beat later, since the glyph drop
+            // sometimes happens on the follow-up frame).
+            Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(ForceRerender));
+            Dispatcher.BeginInvoke(DispatcherPriority.ContextIdle, new Action(ForceRerender));
+        }
+
+        return IntPtr.Zero;
+    }
+
+    /// <summary>Re-issue layout + drawing for the whole window so dropped glyph icons repaint.</summary>
+    private void ForceRerender()
+    {
+        InvalidateTree(this);
+        UpdateLayout();
+    }
+
+    private static void InvalidateTree(DependencyObject root)
+    {
+        if (root is UIElement ui)
+        {
+            ui.InvalidateVisual();
+            if (ui is FrameworkElement fe)
+                fe.InvalidateMeasure();
+        }
+
+        int count = VisualTreeHelper.GetChildrenCount(root);
+        for (int i = 0; i < count; i++)
+            InvalidateTree(VisualTreeHelper.GetChild(root, i));
     }
 
     protected override void OnKeyDown(KeyEventArgs e)
