@@ -35,6 +35,8 @@ A page that helps me find and improve the app later (I rely on this for memory):
 - **Currently running from** — the live executable location.
 - Persist this to disk and **auto-update it when the app is launched from a new
   location** (in case the files are moved), showing a note when the path changed.
+- Never hard-code the path as a static string — always derive it from where the
+  app is actually running so it self-heals when I move things on purpose.
 
 ## 4. Keyboard shortcuts reference (always visible)
 Expose every keyboard shortcut/hotkey in the UI so I never have to remember them:
